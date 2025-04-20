@@ -1,16 +1,39 @@
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+namespace CombatSystem
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class Weapon : MonoBehaviour
     {
-        
-    }
+        private float _attackSpeed;
+        public float Range;
+        [SerializeField]
+        private GameObject _bulletPrefab;
+        [SerializeField]
+        private float _bulletSpeed=10f;
+        [SerializeField]
+        private int _damage;
+        void Start()
+        {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        }
+
+        void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.F))
+            {
+                Attack();
+            }
+        }
+
+        private void Attack()
+        {
+            if (_bulletPrefab != null)
+            {
+                GameObject bulletObj = Instantiate(_bulletPrefab,transform);
+                Bullet bullet = bulletObj.GetComponent<Bullet>();
+                bullet.SetBullet(_damage, _bulletSpeed);                
+                bullet.Fire();
+            }
+        }
     }
 }
