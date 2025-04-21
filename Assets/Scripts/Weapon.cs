@@ -14,6 +14,8 @@ namespace CombatSystem
         [SerializeField]
         private int _damage;
         
+        //TODO: Object pooling for bullet
+
         //Attack on target. Initialize bullet and fire it
         public void Attack()
         {

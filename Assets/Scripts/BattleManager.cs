@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CombatSystem
 {
@@ -9,6 +10,7 @@ namespace CombatSystem
         [SerializeField]
         private List<Character> characterList;
 
+        private int _totalAliveCharacters;
         //Singleton
         private static BattleManager _instance;
         public static BattleManager Instance { get { return _instance; } }
@@ -19,6 +21,11 @@ namespace CombatSystem
             else
                 Destroy(_instance);
         }
+        private void Start()
+        {
+            //if list is not empty, initially all characters in list are alive 
+            _totalAliveCharacters = characterList!=null? characterList.Count : 0;
+        }
         //Returns random alive target 
         public Character GetRandomTargetFor(Character player)
         {
@@ -27,6 +34,26 @@ namespace CombatSystem
                 return null;
             Character target = aliveCharacters[Random.Range(0, aliveCharacters.Count)];
             return target;
+        }
+        // 
+        public void OnCharacterDeath(Character character)
+        {
+            if (!character.IsAlive)
+                _totalAliveCharacters--;
+            if(_totalAliveCharacters<=1)
+            {
+                DeclareWinner();
+            }
+        }
+        private void DeclareWinner()
+        {
+            Character winner = characterList.Find(c => c.IsAlive);
+            if (winner != null)
+            {
+                Debug.Log("Congratulations " + winner.name + "! You won the battle.");
+                return;
+            }
+            Debug.Log("Opps..! No one win the battle.");
         }
     }
 

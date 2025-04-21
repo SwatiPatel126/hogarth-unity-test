@@ -7,6 +7,8 @@ namespace CombatSystem
     {
         public bool IsAlive;
 
+        [SerializeField]
+        private int _maxHealth = 100;
         private int _health;
         [SerializeField]
         private float _moveSpeed = 2.5f;
@@ -14,12 +16,15 @@ namespace CombatSystem
         private float _rotationSpeed = 6f;
         [SerializeField]
         private Weapon _weapon;
+        [SerializeField]
+        private Collider _collider;
         private Character currentTarget;
 
         void Start()
         {
             IsAlive = true;
             currentTarget = null;
+            _health = _maxHealth;
             StartCoroutine(CharacterBattle());
         }
 
@@ -60,7 +65,9 @@ namespace CombatSystem
         private void Die()
         {
             IsAlive=false;
+            _collider.enabled = false;
             gameObject.SetActive(false);
+            BattleManager.Instance.OnCharacterDeath(this);
         }
         //Coroutine which will be executed until character alive. Continously character attacks on target, if target dies, character look for another target
         IEnumerator CharacterBattle()

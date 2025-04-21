@@ -120,11 +120,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5558e06d6a20544b5bd1dbeaaf3d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 100
+  IsAlive: 0
   _moveSpeed: 2
   _rotationSpeed: 5
-  _weapon: {fileID: 0}
-  IsAlive: 0
+  _weapon: {fileID: 1494680676067724711}
+  _collider: {fileID: 5740622213123614295}
 --- !u!1 &7692969110787058421 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6409818694164285616, guid: e631c2bc8cea47740a8c4cbd2bef4d70, type: 3}
@@ -210,6 +210,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61552ce9e233e8c40a7af72ec598be18, type: 3}
+--- !u!114 &1494680676067724711 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8312032951058221027, guid: 61552ce9e233e8c40a7af72ec598be18, type: 3}
+  m_PrefabInstance: {fileID: 7486224796037057092}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9662f2b55ffc0a14bb25523159b32760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8097468532274477651 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1710124807265005591, guid: 61552ce9e233e8c40a7af72ec598be18, type: 3}
