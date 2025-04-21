@@ -42,6 +42,7 @@ namespace CombatSystem
         //On any character death, check battle over condition 
         public void OnCharacterDeath(Character character)
         {
+            Debug.Log("OnCharater Death: " + character.name);
             if (!character.IsAlive)
                 _totalAliveCharacters--;
             if(_totalAliveCharacters<=1 && !_isBattleOver)
