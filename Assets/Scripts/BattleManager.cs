@@ -9,8 +9,11 @@ namespace CombatSystem
         //Reference to all characters inside scene
         [SerializeField]
         private List<Character> characterList;
-
         private int _totalAliveCharacters;
+        private bool _isBattleOver;
+        [SerializeField]
+        private BattleUIController _battleUIController;
+
         //Singleton
         private static BattleManager _instance;
         public static BattleManager Instance { get { return _instance; } }
@@ -25,6 +28,7 @@ namespace CombatSystem
         {
             //if list is not empty, initially all characters in list are alive 
             _totalAliveCharacters = characterList!=null? characterList.Count : 0;
+            _isBattleOver = false;
         }
         //Returns random alive target 
         public Character GetRandomTargetFor(Character player)
@@ -35,25 +39,28 @@ namespace CombatSystem
             Character target = aliveCharacters[Random.Range(0, aliveCharacters.Count)];
             return target;
         }
-        // 
+        //On any character death, check battle over condition 
         public void OnCharacterDeath(Character character)
         {
             if (!character.IsAlive)
                 _totalAliveCharacters--;
-            if(_totalAliveCharacters<=1)
+            if(_totalAliveCharacters<=1 && !_isBattleOver)
             {
                 DeclareWinner();
             }
         }
+        //Search the last alive character and declare it winner 
         private void DeclareWinner()
         {
+            _isBattleOver = true;
+            string battleWinMessage = "Opps..! No one win the battle.";
             Character winner = characterList.Find(c => c.IsAlive);
             if (winner != null)
             {
-                Debug.Log("Congratulations " + winner.name + "! You won the battle.");
-                return;
+                battleWinMessage = "Congratulations " + winner.name + "! \n\nYou won the battle.";                
             }
-            Debug.Log("Opps..! No one win the battle.");
+            Debug.Log(battleWinMessage);
+            _battleUIController.ShowBattleOverPopup(battleWinMessage);
         }
     }
 

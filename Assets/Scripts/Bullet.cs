@@ -32,7 +32,7 @@ namespace CombatSystem
         {
             if (collision.collider.CompareTag("Character"))
             {
-                Debug.Log("collided with : " + collision.transform.parent.name);
+                Debug.Log("bullet collided with : " + collision.transform.parent.name);
                 collision.transform.parent.GetComponent<Character>().DamageHealth(_damage);
                 Destroy(gameObject);
             }
