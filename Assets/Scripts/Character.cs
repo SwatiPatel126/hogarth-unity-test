@@ -1,34 +1,38 @@
+using System.Collections;
 using UnityEngine;
 
 namespace CombatSystem
 {
     public class Character : MonoBehaviour
     {
-        public int Health;
+        public bool IsAlive;
+
+        private int _health;
         [SerializeField]
-        private float _moveSpeed = 2f;
+        private float _moveSpeed = 2.5f;
         [SerializeField]
-        private float _rotationSpeed = 5f;
+        private float _rotationSpeed = 6f;
+        [SerializeField]
         private Weapon _weapon;
-        private bool _isAlive;
-        [SerializeField]
         private Character currentTarget;
 
         void Start()
         {
-            _isAlive = true;
-            // currentTarget = null;
+            IsAlive = true;
+            currentTarget = null;
+            StartCoroutine(CharacterBattle());
         }
 
         void Update()
         {
-            if (currentTarget != null && currentTarget._isAlive)
+            //When target is assigned, character continuously look at and move target until target comes in weapon range
+            if (currentTarget != null && currentTarget.IsAlive)
             {
                 RotateTowardsTarget(currentTarget.transform.position);
                 MoveTowardsTarget(currentTarget.transform.position);
             }
         }
-
+        //Rotate character towards target
         private void RotateTowardsTarget(Vector3 targetPosition)
         {
             Vector3 dir = (targetPosition - transform.position).normalized;
@@ -36,27 +40,44 @@ namespace CombatSystem
             Quaternion lookRotation = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, _rotationSpeed * Time.deltaTime);
         }
-
+        //Move character towards target
         private void MoveTowardsTarget(Vector3 targetPosition)
         {
             float distance = Vector3.Distance(transform.position, targetPosition);
-            if (distance > 5)// it should be outside weapon range
+            if (distance > _weapon.Range)
             {
                 transform.position += transform.forward * _moveSpeed * Time.deltaTime;
             }
         }
-
+        //Health calculation when damage occured to character
         public void DamageHealth(int damage)
         {
-            Health-=damage;
-            if (Health <= 0)
+            _health-=damage;
+            if (_health <= 0)
                 Die();
         }
-
+        //After zero or negative health, character will die
         private void Die()
         {
-            _isAlive=false;
+            IsAlive=false;
             gameObject.SetActive(false);
+        }
+        //Coroutine which will be executed until character alive. Continously character attacks on target, if target dies, character look for another target
+        IEnumerator CharacterBattle()
+        {
+            yield return new WaitForSeconds(Random.Range(0f, 1.5f));
+            while (IsAlive)
+            {
+                if (currentTarget == null || !currentTarget.IsAlive)
+                {
+                    currentTarget = BattleManager.Instance.GetRandomTargetFor(this);
+                }
+                if (currentTarget != null && Vector3.Distance(transform.position, currentTarget.transform.position) <= _weapon.Range)
+                {
+                    _weapon.Attack();
+                }
+                yield return new WaitForSeconds(_weapon.AttackSpeed);
+            }
         }
     }
 }

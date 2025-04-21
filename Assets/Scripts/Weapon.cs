@@ -4,28 +4,18 @@ namespace CombatSystem
 {
     public class Weapon : MonoBehaviour
     {
-        private float _attackSpeed;
-        public float Range;
+        public float AttackSpeed=1f;
+        public float Range=7f;
+
         [SerializeField]
         private GameObject _bulletPrefab;
         [SerializeField]
-        private float _bulletSpeed=10f;
+        private float _bulletSpeed=15f;
         [SerializeField]
         private int _damage;
-        void Start()
-        {
-
-        }
-
-        void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.F))
-            {
-                Attack();
-            }
-        }
-
-        private void Attack()
+        
+        //Attack on target. Initialize bullet and fire it
+        public void Attack()
         {
             if (_bulletPrefab != null)
             {
